@@ -1,0 +1,93 @@
+To execute a function from one class (e.g., `pageOne`) when you are in another class (e.g., `pageTwo`) in Flutter, you can use various methods like callbacks, global keys, or provider-based state management. Here, I'll show you how to achieve this using callbacks.
+
+First, let's create the `pageOne` and `pageTwo` classes with the necessary code:
+
+```dart
+import 'package:flutter/material.dart';
+
+class PageOne extends StatefulWidget {
+  @override
+  _PageOneState createState() => _PageOneState();
+}
+
+class _PageOneState extends State<PageOne> {
+  String message = "";
+
+  void printMe(String text) {
+    setState(() {
+      message = text;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Page One"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(message),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to PageTwo and pass the printMe function as a callback.
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PageTwo(callback: printMe),
+                  ),
+                );
+              },
+              child: Text("Go to Page Two"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PageTwo extends StatelessWidget {
+  final Function(String) callback;
+
+  PageTwo({required this.callback});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Page Two"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                // Call the callback function with a message.
+                callback("Hello from Page Two!");
+              },
+              child: Text("Click Me"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: PageOne(),
+  ));
+}
+```
+
+In this code:
+
+1. `PageOne` has a `printMe` function that updates the `message` state when called.
+2. When you press the "Go to Page Two" button in `PageOne`, it navigates to `PageTwo` and passes the `printMe` function as a callback.
+3. `PageTwo` receives the callback and can call it with a message when the "Click Me" button is pressed.
+
+This way, you can execute the `printMe` function in `PageOne` from `PageTwo`.
