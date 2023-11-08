@@ -91,3 +91,35 @@ In this code:
 3. `PageTwo` receives the callback and can call it with a message when the "Click Me" button is pressed.
 
 This way, you can execute the `printMe` function in `PageOne` from `PageTwo`.
+
+
+
+
+
+class Message {
+  String currentMessageTime;
+
+  Message({required this.currentMessageTime});
+}
+
+void main() {
+  // Sample list of Message objects with currentMessageTime as strings
+  List<Message> messageList = [
+    Message(currentMessageTime: "1636317600"),
+    Message(currentMessageTime: "1679743200"),
+    Message(currentMessageTime: "1662050400"),
+  ];
+
+  // Sort the list in ascending order by currentMessageTime
+  messageList.sort((a, b) {
+    final int timeA = int.parse(a.currentMessageTime);
+    final int timeB = int.parse(b.currentMessageTime);
+    return timeB.compareTo(timeA); // To sort in ascending order (latest date first)
+  });
+
+  // Print the sorted list
+  for (Message message in messageList) {
+    print(message.currentMessageTime);
+  }
+}
+
